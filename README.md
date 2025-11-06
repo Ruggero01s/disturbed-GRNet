@@ -1,9 +1,5 @@
 # GRNet
-Deep Learning architecture for solving Goal Recognition tasks. 
-
-## 🚀 Quick Start with UV Package Manager
-
-This project now supports [UV](https://github.com/astral-sh/uv) - a fast Python package manager!
+Deep Learning architecture for solving Goal Recognition tasks. Experiments to work with noisy data, changing a percentage of actions with random ones. 
 
 ### Setup (Windows)
 ```powershell
@@ -11,14 +7,9 @@ This project now supports [UV](https://github.com/astral-sh/uv) - a fast Python 
 setup_uv.bat
 
 # Option 2: Manual setup
-uv venv --python 3.8
+uv venv --python 3.9
 .venv\Scripts\activate
 uv sync
-```
-
-### Run
-```powershell
-uv run jupyter lab
 ```
 
 📖 **See [UV_SETUP.md](UV_SETUP.md) for detailed instructions** or [UV_QUICKREF.md](UV_QUICKREF.md) for quick reference.
@@ -31,8 +22,8 @@ The following is the folder structure of the repository:
 
 - **code**: contains the code 
 - **models**: contains a model for each domain
-- **supplementary_material**: contains the supplementary material
-- **testsets**: contains the test sets used in our experiments
+- **data**: contains the problems for the various domains
+- **adversarial_gen**: contains code to generate adversarial masks for the problems
 
 ## Citing our work
 If you use this code, please cite the following paper:
