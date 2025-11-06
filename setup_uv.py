@@ -39,7 +39,7 @@ def main():
         sys.exit(1)
     
     # Create virtual environment
-    if not run_command("uv venv --python 3.8", "Creating virtual environment with Python 3.8"):
+    if not run_command("uv venv --python 3.9", "Creating virtual environment with Python 3.9"):
         print("\n⚠️  Virtual environment creation failed, but continuing...")
     
     # Sync dependencies

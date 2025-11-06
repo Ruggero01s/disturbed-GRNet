@@ -22,20 +22,21 @@ MASK_ORIGINAL = 0  # Identificatore per azione originale nella maschera
 MASK_MODIFIED = 1  # Identificatore per azione modificata nella maschera
 
 # Percorsi Base
-BASE_PATH = 'adversarial_gen'
+BASE_PATH = './'
 DATA_DIR = f'{BASE_PATH}/data'
 CODE_DIR = f'{BASE_PATH}/code'
-TMP_DIR = f'{CODE_DIR}/tmp'
+TMP_DIR = f"{BASE_PATH}/tmp"
 
 # Percorsi Relativi Template
 DICTIONARIES_DIR_TEMPLATE = f'{DATA_DIR}/dictionaries/{{domain}}'
 DICTIONARY_FILE_TEMPLATE = f'{DICTIONARIES_DIR_TEMPLATE}/dizionario'
 GOAL_DICTIONARY_FILE_TEMPLATE = f'{DICTIONARIES_DIR_TEMPLATE}/dizionario_goal'
 PLANS_DIR_TEMPLATE = f'{DATA_DIR}/{{domain}}'  # Directory dei piani da processare
-OUTPUT_DIR_TEMPLATE = f'{DATA_DIR}/validator_testset/prova/{{domain}}'
+OUTPUT_DIR_TEMPLATE = f'{DATA_DIR}/validator_testset/noisy_masks/{{domain}}/{{hole_perc}}/'
 
 # Configurazione Domini e Percentuali
-DOMAINS = ['blocksworld', 'logistics', 'driverlog', 'satellite', 'depots', 'zenotravel']
+# DOMAINS = ['blocksworld', 'logistics', 'driverlog', 'satellite', 'depots', 'zenotravel']
+DOMAINS = ['zenotravel']
 HOLE_PERCENTAGES = [10,30,50,70,100]  # Percentuali di "buchi" nei piani
 ATTACK_PERCENTAGES = [10, 20, 30]  # Percentuali di azioni da attaccare
 
@@ -128,7 +129,6 @@ def adversarial_plan(observations, perc_actions, valid_actions):
             mask.append(0)  # Elemento originale
     return new_obs, mask, num_atks
 '''
-
 
 
 def load_dictionary(dictionary_path: str) -> Dict[str, Any]:
@@ -262,7 +262,9 @@ def process_single_plan(
         # Ottiene le azioni valide per l'attacco
         valid_actions = get_grounded_actions(tmp_path, grounder, is_pereira)
     except Exception as e:
+        print(plan_name)
         raise Exception(f"Error getting grounded actions: {e}")
+        
     
     try:
         # Applica l'attacco avversariale
@@ -323,7 +325,7 @@ def process_domain(
     
     # Itera su ogni percentuale di "buchi"
     for hole_perc in hole_percentages:
-        print(f'\n--- Processing plans with {hole_perc}% changes ---')
+        print(f'\n--- Processing plans with {hole_perc}% observability ---')
         attack_histogram[hole_perc] = {}
         
         # Percorso dei piani da processare per questa percentuale di "buchi"
@@ -385,7 +387,7 @@ def process_domain(
                 print(f'Actual attack percentage: {actual_attack_perc:.2f}%')
             
             # Salva i risultati per questa configurazione usando il template
-            output_dir = OUTPUT_DIR_TEMPLATE.format(domain=domain)
+            output_dir = OUTPUT_DIR_TEMPLATE.format(domain=domain, hole_perc=hole_perc)
             os.makedirs(output_dir, exist_ok=True)
             
             output_file = f'{output_dir}/{attack_perc}_mask.json'
@@ -393,11 +395,11 @@ def process_domain(
                 json.dump(solutions_dict, f, indent=4)
             print(f'Saved results to {output_file}')
         
-    # Salva l'analisi degli attacchi per il dominio
-    analysis_file = f'{output_dir}/atk_analysis.json'
-    with open(analysis_file, 'w') as f:
-        json.dump(attack_histogram, f, indent=4)
-    print(f'\nSaved attack analysis to {analysis_file}')
+        # Salva l'analisi degli attacchi per questa percentuale di hole
+        analysis_file = f'{output_dir}/atk_analysis.json'
+        with open(analysis_file, 'w') as f:
+            json.dump(attack_histogram[hole_perc], f, indent=4)
+        print(f'\nSaved attack analysis to {analysis_file}')
 
 
 def main():

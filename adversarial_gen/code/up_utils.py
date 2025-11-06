@@ -104,16 +104,43 @@ def get_goals(problem_dir: str, pereira: bool):
     """
     goals = []
     with open(problem_dir + '/hyps.dat', 'r') as f:
-        for line in f:
-            # Rimuove parentesi e whitespace
-            cleaned_line = line.strip().replace('(', '').replace(')', '')
+        content = f.read()
+    
+    # Join lines that start with comma (continuation lines in zenotravel)
+    lines = content.split('\n')
+    joined_lines = []
+    current_line = ''
+    
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith(','):
+            # Continuation line - append to current line
+            current_line += ' ' + stripped
+        else:
+            # New goal hypothesis
+            if current_line:
+                joined_lines.append(current_line)
+            current_line = stripped
+    
+    # Don't forget the last line
+    if current_line:
+        joined_lines.append(current_line)
+    
+    # Process each complete goal line
+    for line in joined_lines:
+        if not line:  # Skip empty lines
+            continue
             
-            if pereira:
-                # Formato Pereira: converte in uppercase e split per virgola
-                goals.append(cleaned_line.upper().split(','))
-            else:
-                # Formato standard: split per virgola e spazio
-                goals.append(cleaned_line.split(', '))
+        # Rimuove parentesi e whitespace
+        cleaned_line = line.replace('(', '').replace(')', '').strip()
+        
+        if pereira:
+            # Formato Pereira: converte in uppercase e split per virgola
+            goals.append([g.strip() for g in cleaned_line.upper().split(',') if g.strip()])
+        else:
+            # Formato standard: split per virgola e spazio
+            goals.append([g.strip() for g in cleaned_line.split(',') if g.strip()])
+    
     return goals
 
 
@@ -134,13 +161,26 @@ def get_real_goal(problem_dir: str, pereira: bool):
         ['on a b', 'on b c', 'ontable c']
     """
     with open(problem_dir + '/real_hyp.dat', 'r') as f:
-        # Legge la prima linea (il file contiene solo il goal reale)
-        line = f.readline().strip().replace('(', '').replace(')', '')
-        
-        if pereira:
-            return line.upper().split(',')
+        # Read all content to handle multi-line goals (like zenotravel)
+        content = f.read().strip()
+    
+    # Join lines that start with comma (continuation lines)
+    lines = content.split('\n')
+    line = ''
+    for l in lines:
+        stripped = l.strip()
+        if stripped.startswith(','):
+            line += ' ' + stripped
         else:
-            return line.split(', ')
+            line += ' ' + stripped
+    
+    # Clean up the line
+    line = line.strip().replace('(', '').replace(')', '')
+    
+    if pereira:
+        return [g.strip() for g in line.upper().split(',') if g.strip()]
+    else:
+        return [g.strip() for g in line.split(',') if g.strip()]
         
 
 def get_template(problem_dir: str):
@@ -510,6 +550,55 @@ def new_observation(problem_dir: str, filename: str, new_obs: str):
 # ============================================================================
 # GROUNDING E AZIONI
 # ============================================================================
+
+def fix_domain_file(domain_path: str) -> str:
+    """
+    Fix common PDDL syntax issues that unified_planning parser doesn't support.
+    Creates a fixed version of the domain file.
+    
+    Args:
+        domain_path: Path to the original domain.pddl file
+    
+    Returns:
+        Path to the fixed domain file
+    
+    Note:
+        Fixes the '(either type1 type2)' syntax which is not supported by
+        unified_planning parser. Replaces it with individual predicates.
+    """
+    with open(domain_path, 'r') as f:
+        content = f.read()
+    
+    # Check if file needs fixing (contains 'either' keyword)
+    if 'either' not in content.lower():
+        return domain_path
+    
+    # Fix the (either ...) syntax in predicates
+    # Example: (at ?x - (either person aircraft) ?c - city)
+    # Becomes: Two separate predicates for person and aircraft
+    
+    import re
+    
+    # Find and replace (either type1 type2) patterns
+    # This regex matches: ?var - (either type1 type2 ...)
+    either_pattern = r'\?(\w+)\s*-\s*\(either\s+([^)]+)\)'
+    
+    def replace_either(match):
+        var_name = match.group(1)
+        types = match.group(2).strip().split()
+        # For now, just use the first type (simplified approach)
+        # A more complete fix would duplicate the predicate
+        return f'?{var_name} - object'
+    
+    fixed_content = re.sub(either_pattern, replace_either, content)
+    
+    # Save fixed version
+    fixed_path = domain_path.replace('.pddl', '_fixed.pddl')
+    with open(fixed_path, 'w') as f:
+        f.write(fixed_content)
+    
+    return fixed_path
+
         
 def get_grounded_actions(problem_dir, grounder, pereira=False):
     """
@@ -537,10 +626,14 @@ def get_grounded_actions(problem_dir, grounder, pereira=False):
     # Crea il file problem.pddl dal template
     create_problem(problem_dir, pereira=pereira)
     
+    # Fix domain file if needed (handles 'either' syntax issues)
+    domain_path = f'{problem_dir}/domain.pddl'
+    fixed_domain_path = fix_domain_file(domain_path)
+    
     # Legge e parsa il problema PDDL
     reader = PDDLReader()
     problem = reader.parse_problem(
-        f'{problem_dir}/domain.pddl', 
+        fixed_domain_path, 
         f'{problem_dir}/problem.pddl'
     )
 

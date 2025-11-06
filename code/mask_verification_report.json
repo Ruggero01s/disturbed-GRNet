@@ -1,0 +1,649 @@
+{
+  "blocksworld": {
+    "domain": "blocksworld",
+    "observation_percentages": {
+      "10": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "30": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "50": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "70": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "100": {
+        "problem_count": 846,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 846
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 846
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 846
+          }
+        }
+      }
+    }
+  },
+  "logistics": {
+    "domain": "logistics",
+    "observation_percentages": {
+      "10": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "30": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "50": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "70": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "100": {
+        "problem_count": 908,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 908
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 908
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 908
+          }
+        }
+      }
+    }
+  },
+  "satellite": {
+    "domain": "satellite",
+    "observation_percentages": {
+      "10": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "30": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "50": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "70": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "100": {
+        "problem_count": 944,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 944
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 944
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 944
+          }
+        }
+      }
+    }
+  },
+  "zenotravel": {
+    "domain": "zenotravel",
+    "observation_percentages": {
+      "10": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "incomplete",
+            "problems_in_mask": 996,
+            "missing_count": 4,
+            "missing_problems": [
+              "zeno-travel_p01_hyp-2_10_2.tar.bz2",
+              "zenotravel_p004531_hyp=hyp-7_10.zip",
+              "zenotravel_p002929_hyp=hyp-3_10.zip",
+              "zenotravel_p005548_hyp=hyp-4_10.zip"
+            ]
+          },
+          "20": {
+            "status": "incomplete",
+            "problems_in_mask": 994,
+            "missing_count": 6,
+            "missing_problems": [
+              "zenotravel_p005900_hyp=hyp-5_10.zip",
+              "zenotravel_p006806_hyp=hyp-3_10.zip",
+              "zenotravel_p002343_hyp=hyp-5_10.zip",
+              "zenotravel_p004242_hyp=hyp-6_10.zip",
+              "zenotravel_p002953_hyp=hyp-2_10.zip",
+              "zenotravel_p005853_hyp=hyp-3_10.zip"
+            ]
+          },
+          "30": {
+            "status": "incomplete",
+            "problems_in_mask": 994,
+            "missing_count": 6,
+            "missing_problems": [
+              "zenotravel_p000549_hyp=hyp-5_10.zip",
+              "zeno-travel_p05_hyp-2_10_3.tar.bz2",
+              "zeno-travel_p06_hyp-1_10_3.tar.bz2",
+              "zeno-travel_p07_hyp-2_10_2.tar.bz2",
+              "zeno-travel_p02_hyp-4_10_3.tar.bz2",
+              "zenotravel_p004366_hyp=hyp-6_10.zip"
+            ]
+          }
+        }
+      },
+      "30": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "incomplete",
+            "problems_in_mask": 995,
+            "missing_count": 5,
+            "missing_problems": [
+              "zenotravel_p006458_hyp=hyp-3_30.zip",
+              "zenotravel_p003494_hyp=hyp-4_30.zip",
+              "zeno-travel_p05_hyp-3_30_1.tar.bz2",
+              "zeno-travel_p05_hyp-2_30_3.tar.bz2",
+              "zenotravel_p005502_hyp=hyp-3_30.zip"
+            ]
+          },
+          "20": {
+            "status": "incomplete",
+            "problems_in_mask": 996,
+            "missing_count": 4,
+            "missing_problems": [
+              "zenotravel_p002452_hyp=hyp-1_30.zip",
+              "zenotravel_p003894_hyp=hyp-5_30.zip",
+              "zenotravel_p003455_hyp=hyp-4_30.zip",
+              "zenotravel_p004635_hyp=hyp-3_30.zip"
+            ]
+          },
+          "30": {
+            "status": "incomplete",
+            "problems_in_mask": 995,
+            "missing_count": 5,
+            "missing_problems": [
+              "zeno-travel_p06_hyp-2_30_2.tar.bz2",
+              "zenotravel_p001433_hyp=hyp-0_30.zip",
+              "zenotravel_p002716_hyp=hyp-2_30.zip",
+              "zenotravel_p001233_hyp=hyp-1_30.zip",
+              "zenotravel_p000477_hyp=hyp-6_30.zip"
+            ]
+          }
+        }
+      },
+      "50": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "incomplete",
+            "problems_in_mask": 997,
+            "missing_count": 3,
+            "missing_problems": [
+              "zeno-travel_p01_hyp-4_50_1.tar.bz2",
+              "zenotravel_p006144_hyp=hyp-0_50.zip",
+              "zenotravel_p003754_hyp=hyp-1_50.zip"
+            ]
+          },
+          "20": {
+            "status": "incomplete",
+            "problems_in_mask": 995,
+            "missing_count": 5,
+            "missing_problems": [
+              "zenotravel_p004504_hyp=hyp-6_50.zip",
+              "zenotravel_p000458_hyp=hyp-8_50.zip",
+              "zenotravel_p001895_hyp=hyp-3_50.zip",
+              "zenotravel_p003161_hyp=hyp-5_50.zip",
+              "zenotravel_p004050_hyp=hyp-1_50.zip"
+            ]
+          },
+          "30": {
+            "status": "incomplete",
+            "problems_in_mask": 997,
+            "missing_count": 3,
+            "missing_problems": [
+              "zeno-travel_p04_hyp-1_50_1.tar.bz2",
+              "zeno-travel_p07_hyp-1_50_2.tar.bz2",
+              "zenotravel_p004690_hyp=hyp-4_50.zip"
+            ]
+          }
+        }
+      },
+      "70": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "incomplete",
+            "problems_in_mask": 995,
+            "missing_count": 5,
+            "missing_problems": [
+              "zenotravel_p002678_hyp=hyp-4_70.zip",
+              "zenotravel_p006146_hyp=hyp-1_70.zip",
+              "zeno-travel_p03_hyp-4_70_3.tar.bz2",
+              "zeno-travel_p05_hyp-4_70_3.tar.bz2",
+              "zenotravel_p005670_hyp=hyp-4_70.zip"
+            ]
+          },
+          "20": {
+            "status": "incomplete",
+            "problems_in_mask": 996,
+            "missing_count": 4,
+            "missing_problems": [
+              "zenotravel_p004660_hyp=hyp-2_70.zip",
+              "zenotravel_p001038_hyp=hyp-5_70.zip",
+              "zenotravel_p004229_hyp=hyp-5_70.zip",
+              "zenotravel_p006161_hyp=hyp-2_70.zip"
+            ]
+          },
+          "30": {
+            "status": "incomplete",
+            "problems_in_mask": 994,
+            "missing_count": 6,
+            "missing_problems": [
+              "zenotravel_p003087_hyp=hyp-1_70.zip",
+              "zenotravel_p006212_hyp=hyp-4_70.zip",
+              "zeno-travel_p01_hyp-3_70_2.tar.bz2",
+              "zenotravel_p003772_hyp=hyp-5_70.zip",
+              "zenotravel_p006366_hyp=hyp-2_70.zip",
+              "zeno-travel_p06_hyp-2_70_2.tar.bz2"
+            ]
+          }
+        }
+      },
+      "100": {
+        "problem_count": 944,
+        "noise_levels": {
+          "10": {
+            "status": "incomplete",
+            "problems_in_mask": 942,
+            "missing_count": 2,
+            "missing_problems": [
+              "zenotravel_p001124_hyp=hyp-2_100.zip",
+              "zenotravel_p004135_hyp=hyp-7_100.zip"
+            ]
+          },
+          "20": {
+            "status": "incomplete",
+            "problems_in_mask": 941,
+            "missing_count": 3,
+            "missing_problems": [
+              "zenotravel_p001877_hyp=hyp-5_100.zip",
+              "zenotravel_p000635_hyp=hyp-6_100.zip",
+              "zeno-travel_p05_hyp-1_full.tar.bz2"
+            ]
+          },
+          "30": {
+            "status": "incomplete",
+            "problems_in_mask": 943,
+            "missing_count": 1,
+            "missing_problems": [
+              "zenotravel_p001083_hyp=hyp-2_100.zip"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "driverlog": {
+    "domain": "driverlog",
+    "observation_percentages": {
+      "10": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "30": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "50": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "70": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "100": {
+        "problem_count": 944,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 944
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 944
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 944
+          }
+        }
+      }
+    }
+  },
+  "depots": {
+    "domain": "depots",
+    "observation_percentages": {
+      "10": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "30": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "50": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "70": {
+        "problem_count": 1000,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 1000
+          }
+        }
+      },
+      "100": {
+        "problem_count": 944,
+        "noise_levels": {
+          "10": {
+            "status": "complete",
+            "problems_in_mask": 944
+          },
+          "20": {
+            "status": "complete",
+            "problems_in_mask": 944
+          },
+          "30": {
+            "status": "complete",
+            "problems_in_mask": 944
+          }
+        }
+      }
+    }
+  }
+}
