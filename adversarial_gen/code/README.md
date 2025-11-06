@@ -2,7 +2,7 @@
 
 ## Descrizione
 
-Questo modulo genera dataset di validazione per il riconoscimento di goal ingannevoli, applicando attacchi avversariali di tipo "buchi random" ai piani di azioni originali.
+Questo modulo genera test dataset per noisy goal recognition, applicando attacchi di vario tipo ai piani originali.
 
 ## Funzionalità Principali
 
@@ -16,6 +16,7 @@ Il sistema processa automaticamente diversi domini PDDL:
 - Driverlog
 - Satellite
 - Depots
+- Zenotravel
 
 ### 3. Configurazioni Multiple
 Per ogni dominio, vengono generate diverse configurazioni con:
