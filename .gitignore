@@ -44,7 +44,6 @@ MANIFEST
 # *.hdf5
 
 # Data
-*.csv
 *.dat
 *.log
 *.pkl
