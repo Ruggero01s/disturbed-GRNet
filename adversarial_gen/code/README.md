@@ -25,7 +25,7 @@ Per ogni dominio, vengono generate diverse configurazioni con:
 ## Struttura del Codice
 
 ```
-codice_ruggero.py
+main.py
 ├── adversarial_plan()          # Applica l'attacco a una sequenza di azioni
 ├── load_dictionary()           # Carica dizionari serializzati
 ├── process_single_plan()       # Processa un singolo piano
@@ -63,19 +63,6 @@ Il sistema genera:
 ## Configurazione
 
 Le costanti principali possono essere modificate nella funzione `main()`:
-
-```python
-BASE_PATH = '/home/lserina/DeceptiveGoalRec'
-DOMAINS = ['blocksworld', 'logistics', 'driverlog', 'satellite', 'depots']
-HOLE_PERCENTAGES = [100]
-ATTACK_PERCENTAGES = [10, 20, 30]
-```
-
-## Dipendenze
-
-- `unified_planning`: Per la gestione dei problemi PDDL
-- `tqdm`: Per le barre di progresso
-- `up_utils`: Modulo custom con funzioni di utilità
 
 ## Uso
 
