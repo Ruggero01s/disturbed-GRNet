@@ -1,0 +1,152 @@
+{
+  "blocksworld": {
+    "domain": "blocksworld",
+    "observation_percentages": {
+      "10": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "30": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "50": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "70": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "100": {
+        "status": "no_problems",
+        "problem_count": 0
+      }
+    }
+  },
+  "logistics": {
+    "domain": "logistics",
+    "observation_percentages": {
+      "10": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "30": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "50": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "70": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "100": {
+        "status": "no_problems",
+        "problem_count": 0
+      }
+    }
+  },
+  "satellite": {
+    "domain": "satellite",
+    "observation_percentages": {
+      "10": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "30": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "50": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "70": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "100": {
+        "status": "no_problems",
+        "problem_count": 0
+      }
+    }
+  },
+  "zenotravel": {
+    "domain": "zenotravel",
+    "observation_percentages": {
+      "10": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "30": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "50": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "70": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "100": {
+        "status": "no_problems",
+        "problem_count": 0
+      }
+    }
+  },
+  "driverlog": {
+    "domain": "driverlog",
+    "observation_percentages": {
+      "10": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "30": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "50": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "70": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "100": {
+        "status": "no_problems",
+        "problem_count": 0
+      }
+    }
+  },
+  "depots": {
+    "domain": "depots",
+    "observation_percentages": {
+      "10": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "30": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "50": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "70": {
+        "status": "no_problems",
+        "problem_count": 0
+      },
+      "100": {
+        "status": "no_problems",
+        "problem_count": 0
+      }
+    }
+  }
+}

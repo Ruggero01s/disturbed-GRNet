@@ -32,7 +32,8 @@ DICTIONARIES_DIR_TEMPLATE = f'{DATA_DIR}/dictionaries/{{domain}}'
 DICTIONARY_FILE_TEMPLATE = f'{DICTIONARIES_DIR_TEMPLATE}/dizionario'
 GOAL_DICTIONARY_FILE_TEMPLATE = f'{DICTIONARIES_DIR_TEMPLATE}/dizionario_goal'
 PLANS_DIR_TEMPLATE = f'{DATA_DIR}/{{domain}}'  # Directory dei piani da processare
-OUTPUT_DIR_TEMPLATE = f'{DATA_DIR}/validator_testset/noisy_masks/{{domain}}/{{hole_perc}}/'
+OUTPUT_DIR_TEMPLATE = f'{DATA_DIR}/validator_testset/prova/{{domain}}/{{hole_perc}}/'
+ERROR_DIR_TEMPLATE = f'{DATA_DIR}/validator_testset/errors/{{domain}}/{{hole_perc}}'
 
 # Configurazione Domini e Percentuali
 # DOMAINS = ['blocksworld', 'logistics', 'driverlog', 'satellite', 'depots', 'zenotravel']
@@ -200,6 +201,52 @@ def get_init_state_safe(problem_dir: str) -> List[str]:
         return []
 
 
+def save_error_info(plan_name: str, error: Exception, error_dir: str, tmp_path: str):
+    """
+    Salva le informazioni di errore e i file del problema per il debug.
+    
+    Args:
+        plan_name: Nome del file del piano che ha causato l'errore
+        error: L'eccezione che è stata sollevata
+        error_dir: Directory dove salvare i file di errore
+        tmp_path: Directory temporanea dove sono stati estratti i file
+    """
+    import shutil
+    import traceback as tb
+    
+    # Crea la directory degli errori se non esiste
+    os.makedirs(error_dir, exist_ok=True)
+    
+    # Crea una sottodirectory per questo specifico problema
+    problem_name = plan_name.replace('.zip', '').replace('.tar.bz2', '')
+    problem_error_dir = os.path.join(error_dir, problem_name)
+    os.makedirs(problem_error_dir, exist_ok=True)
+    
+    # Salva l'errore in un file di testo
+    error_file = os.path.join(problem_error_dir, 'error.txt')
+    with open(error_file, 'w') as f:
+        f.write(f"Problem file: {plan_name}\n")
+        f.write(f"Error type: {type(error).__name__}\n")
+        f.write(f"Error message: {str(error)}\n\n")
+        f.write("Full traceback:\n")
+        f.write(tb.format_exc())
+    
+    # Copia i file estratti dalla directory temporanea
+    if os.path.exists(tmp_path):
+        for file in os.listdir(tmp_path):
+            src = os.path.join(tmp_path, file)
+            if os.path.isfile(src):
+                dst = os.path.join(problem_error_dir, file)
+                try:
+                    shutil.copy2(src, dst)
+                except Exception as copy_err:
+                    # Se la copia fallisce, salva almeno l'errore
+                    with open(error_file, 'a') as f:
+                        f.write(f"\nFailed to copy {file}: {copy_err}\n")
+    
+    print(f'  → Error info saved to: {problem_error_dir}')
+
+
 def process_single_plan(
     plan_name: str,
     plans_path: str,
@@ -235,36 +282,34 @@ def process_single_plan(
         problem_dir = os.path.join(plans_path, plan_name)
         open_compressed_file(problem_dir, tmp_path)
     except Exception as e:
-        raise Exception(f"Error opening compressed file: {e}")
+        raise Exception(f"[{plan_name}] Error opening compressed file: {e}")
     
     try:
         # Legge i dati del problema
         observations = get_observations(tmp_path)
     except Exception as e:
-        raise Exception(f"Error getting observations: {e}")
+        raise Exception(f"[{plan_name}] Error getting observations: {e}")
     
     try:
         goals = get_goals(tmp_path, is_pereira)
     except Exception as e:
-        raise Exception(f"Error getting goals: {e}")
+        raise Exception(f"[{plan_name}] Error getting goals: {e}")
     
     try:
         real_goal = get_real_goal(tmp_path, is_pereira)
     except Exception as e:
-        raise Exception(f"Error getting real goal: {e}")
+        raise Exception(f"[{plan_name}] Error getting real goal: {e}")
     
     try:
         init_state = get_init_state_safe(tmp_path)
     except Exception as e:
-        raise Exception(f"Error getting init state: {e}")
+        raise Exception(f"[{plan_name}] Error getting init state: {e}")
     
     try:
         # Ottiene le azioni valide per l'attacco
         valid_actions = get_grounded_actions(tmp_path, grounder, is_pereira)
     except Exception as e:
-        print(plan_name)
-        raise Exception(f"Error getting grounded actions: {e}")
-        
+        raise Exception(f"[{plan_name}] Error getting grounded actions: {e}")
     
     try:
         # Applica l'attacco avversariale
@@ -274,7 +319,7 @@ def process_single_plan(
             valid_actions
         )
     except Exception as e:
-        raise Exception(f"Error applying adversarial plan: {e}")
+        raise Exception(f"[{plan_name}] Error applying adversarial plan: {e}")
     
     try:
         # Costruisce il risultato con i dati encoded
@@ -286,7 +331,7 @@ def process_single_plan(
             'goals': [encode_goal(goal, dizionario_goal) for goal in goals]
         }
     except Exception as e:
-        raise Exception(f"Error encoding results: {e}")
+        raise Exception(f"[{plan_name}] Error encoding results: {e}")
     
     return result, num_attacks, len(observations)
 
@@ -346,6 +391,10 @@ def process_domain(
             
             total_attacks = 0
             total_observations = 0
+            error_count = 0
+            
+            # Directory per salvare gli errori
+            error_dir = ERROR_DIR_TEMPLATE.format(domain=domain, hole_perc=hole_perc)
             
             # Processa ogni piano nella directory
             plan_files = [f for f in os.listdir(plans_path) 
@@ -375,9 +424,11 @@ def process_domain(
                     attack_histogram[hole_perc][attack_perc][num_attacks] += 1
                     
                 except Exception as e:
-                    print(f'\nError processing {plan_name}: {str(e)}')
-                    import traceback
-                    traceback.print_exc()
+                    error_count += 1
+                    print(f'\n✗ Error processing {plan_name}: {str(e)}')
+                    
+                    # Salva le informazioni di errore per il debug
+                    save_error_info(plan_name, e, error_dir, TMP_DIR)
                     continue
             
             # Calcola la percentuale effettiva di attacchi
@@ -385,6 +436,11 @@ def process_domain(
                 actual_attack_perc = (total_attacks / total_observations) * 100
                 attack_histogram[hole_perc][attack_perc]["actual_atk_perc"] = actual_attack_perc
                 print(f'Actual attack percentage: {actual_attack_perc:.2f}%')
+            
+            # Report errori
+            if error_count > 0:
+                print(f'⚠ {error_count} problems failed (see {error_dir} for details)')
+                attack_histogram[hole_perc][attack_perc]["errors"] = error_count
             
             # Salva i risultati per questa configurazione usando il template
             output_dir = OUTPUT_DIR_TEMPLATE.format(domain=domain, hole_perc=hole_perc)
@@ -394,6 +450,17 @@ def process_domain(
             with open(output_file, 'w') as f:
                 json.dump(solutions_dict, f, indent=4)
             print(f'Saved results to {output_file}')
+            
+            # Salva anche un summary degli errori se ci sono stati
+            if error_count > 0:
+                error_summary_file = f'{error_dir}/error_summary_{attack_perc}pct.txt'
+                with open(error_summary_file, 'w') as f:
+                    f.write(f"Error Summary for {domain} - {hole_perc}% observability - {attack_perc}% attack\n")
+                    f.write(f"{'='*60}\n")
+                    f.write(f"Total problems: {len(plan_files)}\n")
+                    f.write(f"Successful: {len(solutions_dict)}\n")
+                    f.write(f"Failed: {error_count}\n")
+                    f.write(f"\nError details saved in subdirectories of: {error_dir}\n")
         
         # Salva l'analisi degli attacchi per questa percentuale di hole
         analysis_file = f'{output_dir}/atk_analysis.json'

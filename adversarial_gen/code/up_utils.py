@@ -564,7 +564,9 @@ def fix_domain_file(domain_path: str) -> str:
     
     Note:
         Fixes the '(either type1 type2)' syntax which is not supported by
-        unified_planning parser. Replaces it with individual predicates.
+        unified_planning parser. Replaces it with proper type hierarchy:
+        - Creates a parent type 'locable' that both 'person' and 'aircraft' inherit from
+        - Replaces (either person aircraft) with the parent type 'locable'
     """
     with open(domain_path, 'r') as f:
         content = f.read()
@@ -573,22 +575,44 @@ def fix_domain_file(domain_path: str) -> str:
     if 'either' not in content.lower():
         return domain_path
     
-    # Fix the (either ...) syntax in predicates
-    # Example: (at ?x - (either person aircraft) ?c - city)
-    # Becomes: Two separate predicates for person and aircraft
-    
     import re
     
-    # Find and replace (either type1 type2) patterns
-    # This regex matches: ?var - (either type1 type2 ...)
+    # Find the (:types ...) section
+    types_pattern = r'(\(:types\s+)([^)]+)(\))'
+    types_match = re.search(types_pattern, content, re.DOTALL)
+    
+    if types_match:
+        types_section = types_match.group(2)
+        
+        # Parse existing types to find what needs to be reorganized
+        # For zenotravel: aircraft person city flevel - object
+        # Should become: locable city flevel - object
+        #                aircraft person - locable
+        
+        # Check if this is zenotravel domain (has aircraft and person)
+        if 'aircraft' in types_section and 'person' in types_section:
+            # Reconstruct the types section with proper hierarchy
+            new_types = 'locable city flevel - object\n\taircraft person - locable'
+            content = content[:types_match.start(2)] + new_types + content[types_match.end(2):]
+    
+    # Find and replace (either type1 type2) patterns in predicates
+    # Example: (at ?x - (either person aircraft) ?c - city)
+    # Becomes: (at ?x - locable ?c - city)
     either_pattern = r'\?(\w+)\s*-\s*\(either\s+([^)]+)\)'
     
     def replace_either(match):
         var_name = match.group(1)
         types = match.group(2).strip().split()
-        # For now, just use the first type (simplified approach)
-        # A more complete fix would duplicate the predicate
-        return f'?{var_name} - object'
+        
+        # Determine the parent type based on the types found
+        # For zenotravel: person and aircraft -> locable
+        if set(types) == {'person', 'aircraft'} or set(types) == {'aircraft', 'person'}:
+            parent_type = 'locable'
+        else:
+            # Fallback to object for other cases
+            parent_type = 'object'
+        
+        return f'?{var_name} - {parent_type}'
     
     fixed_content = re.sub(either_pattern, replace_either, content)
     
