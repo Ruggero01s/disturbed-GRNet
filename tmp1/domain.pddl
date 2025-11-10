@@ -1,61 +1,31 @@
-(define (domain zeno-travel)
-(:requirements :typing)
-(:types aircraft person city flevel - object)
-(:predicates (at ?x - (either person aircraft) ?c - city)
-             (in ?p - person ?a - aircraft)
-       (fuel-level ?a - aircraft ?l - flevel)
-       (next ?l1 ?l2 - flevel))
+(define (domain blocksworld)
+  (:requirements :strips)
+(:predicates (clear ?x)
+             (on-table ?x)
+             (arm-empty)
+             (holding ?x)
+             (on ?x ?y))
 
+(:action pickup
+  :parameters (?ob)
+  :precondition (and (clear ?ob) (on-table ?ob) (arm-empty))
+  :effect (and (holding ?ob) (not (clear ?ob)) (not (on-table ?ob)) 
+               (not (arm-empty))))
 
-(:action board
- :parameters (?p - person ?a - aircraft ?c - city)
- 
- :precondition (and (at ?p ?c)
-                 (at ?a ?c))
- :effect (and (not (at ?p ?c))
-              (in ?p ?a)))
+(:action putdown
+  :parameters  (?ob)
+  :precondition (holding ?ob)
+  :effect (and (clear ?ob) (arm-empty) (on-table ?ob) 
+               (not (holding ?ob))))
 
-(:action debark
- :parameters (?p - person ?a - aircraft ?c - city)
+(:action stack
+  :parameters  (?ob ?underob)
+  :precondition (and (clear ?underob) (holding ?ob))
+  :effect (and (arm-empty) (clear ?ob) (on ?ob ?underob)
+               (not (clear ?underob)) (not (holding ?ob))))
 
- :precondition (and (in ?p ?a)
-                 (at ?a ?c))
- :effect (and (not (in ?p ?a))
-              (at ?p ?c)))
-
-(:action fly 
- :parameters (?a - aircraft ?c1 ?c2 - city ?l1 ?l2 - flevel)
- 
- :precondition (and (at ?a ?c1)
-                 (fuel-level ?a ?l1)
-     (next ?l2 ?l1))
- :effect (and (not (at ?a ?c1))
-              (at ?a ?c2)
-              (not (fuel-level ?a ?l1))
-              (fuel-level ?a ?l2)))
-                                  
-(:action zoom
- :parameters (?a - aircraft ?c1 ?c2 - city ?l1 ?l2 ?l3 - flevel)
-
- :precondition (and (at ?a ?c1)
-                 (fuel-level ?a ?l1)
-     (next ?l2 ?l1)
-     (next ?l3 ?l2)
-    )
- :effect (and (not (at ?a ?c1))
-              (at ?a ?c2)
-              (not (fuel-level ?a ?l1))
-              (fuel-level ?a ?l3)
-  )
-) 
-
-(:action refuel
- :parameters (?a - aircraft ?c - city ?l - flevel ?l1 - flevel)
-
- :precondition (and (fuel-level ?a ?l)
-                 (next ?l ?l1)
-                 (at ?a ?c))
- :effect (and (fuel-level ?a ?l1) (not (fuel-level ?a ?l))))
-
-
-)
+(:action unstack
+  :parameters  (?ob ?underob)
+  :precondition (and (on ?ob ?underob) (clear ?ob) (arm-empty))
+  :effect (and (holding ?ob) (clear ?underob)
+               (not (on ?ob ?underob)) (not (clear ?ob)) (not (arm-empty)))))

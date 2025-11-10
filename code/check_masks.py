@@ -13,7 +13,7 @@ from typing import Dict, List, Tuple
 # Configuration
 DOMAINS = ['blocksworld', 'logistics', 'satellite', 'zenotravel', 'driverlog', 'depots']
 OBSERVATION_PERCENTAGES = [10, 30, 50, 70, 100]
-NOISE_LEVELS = [10, 20, 30]
+NOISE_LEVELS = [5, 10, 15, 20, 30]
 BASE_DATA_DIR = '../data'
 MASK_BASE_DIR = '../data/validator_testset/noisy_masks'
 

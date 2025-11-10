@@ -187,3 +187,17 @@ For full help and all options:
 ```bash
 python run_noisy_comparison.py --help
 ```
+
+# ex 1
+/home/ruggero.signoroni/disturbed-GRNet/.venv/bin/python run_noisy_comparison.py \
+    --domains zenotravel \
+    --noise-levels 0 10 20 30 \
+    --obs-percentages 10 30 50 70 100 \
+    --output-dir ./disturbed_results
+
+# ex2
+python run_noisy_comparison.py \
+    --domains blocksworld depots driverlog \
+    --noise-levels 0 10 20 30 \
+    --obs-percentages 10 30 50 70 100 \
+    --output-dir ./full_results

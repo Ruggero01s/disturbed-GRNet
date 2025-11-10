@@ -39,7 +39,7 @@ ERROR_DIR_TEMPLATE = f'{DATA_DIR}/validator_testset/errors/{{domain}}/{{hole_per
 # DOMAINS = ['blocksworld', 'logistics', 'driverlog', 'satellite', 'depots', 'zenotravel']
 DOMAINS = ['zenotravel']
 HOLE_PERCENTAGES = [10,30,50,70,100]  # Percentuali di "buchi" nei piani
-ATTACK_PERCENTAGES = [10, 20, 30]  # Percentuali di azioni da attaccare
+ATTACK_PERCENTAGES = [5, 15]  # Percentuali di azioni da attaccare
 
 # Nome del Grounder
 GROUNDER_NAME = "fast-downward-reachability-grounder"

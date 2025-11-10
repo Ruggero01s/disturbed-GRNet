@@ -1,61 +1,40 @@
-(define (domain zeno-travel)
-(:requirements :typing)
-(:types aircraft person city flevel - object)
-(:predicates (at ?x - (either person aircraft) ?c - city)
-             (in ?p - person ?a - aircraft)
-       (fuel-level ?a - aircraft ?l - flevel)
-       (next ?l1 ?l2 - flevel))
+(define (domain satellite)
+(:requirements :equality :strips)
+(:predicates
+   (on_board ?i ?s) (supports ?i ?m) (pointing ?s ?d) (power_avail ?s) (power_on ?i) (calibrated ?i) (have_image ?d ?m) (calibration_target ?i ?d)(satellite ?x) (direction ?x) (instrument ?x) (mode ?x) )
+(:action turn_to
+ :parameters ( ?s ?d_new ?d_prev)
+ :precondition
+  (and (satellite ?s) (direction ?d_new) (direction ?d_prev)  (pointing ?s ?d_prev))
+ :effect
+  (and (pointing ?s ?d_new) (not (pointing ?s ?d_prev))))
 
+(:action switch_on
+ :parameters ( ?i ?s)
+ :precondition
+  (and (instrument ?i) (satellite ?s)  (on_board ?i ?s) (power_avail ?s))
+ :effect
+  (and (power_on ?i) (not (calibrated ?i)) (not (power_avail ?s))))
 
-(:action board
- :parameters (?p - person ?a - aircraft ?c - city)
- 
- :precondition (and (at ?p ?c)
-                 (at ?a ?c))
- :effect (and (not (at ?p ?c))
-              (in ?p ?a)))
+(:action switch_off
+ :parameters ( ?i ?s)
+ :precondition
+  (and (instrument ?i) (satellite ?s)  (on_board ?i ?s) (power_on ?i))
+ :effect
+  (and (power_avail ?s) (not (power_on ?i))))
 
-(:action debark
- :parameters (?p - person ?a - aircraft ?c - city)
+(:action calibrate
+ :parameters ( ?s ?i ?d)
+ :precondition
+  (and (satellite ?s) (instrument ?i) (direction ?d)  (on_board ?i ?s) (calibration_target ?i ?d) (pointing ?s ?d) (power_on ?i))
+ :effect
+   (calibrated ?i))
 
- :precondition (and (in ?p ?a)
-                 (at ?a ?c))
- :effect (and (not (in ?p ?a))
-              (at ?p ?c)))
-
-(:action fly 
- :parameters (?a - aircraft ?c1 ?c2 - city ?l1 ?l2 - flevel)
- 
- :precondition (and (at ?a ?c1)
-                 (fuel-level ?a ?l1)
-     (next ?l2 ?l1))
- :effect (and (not (at ?a ?c1))
-              (at ?a ?c2)
-              (not (fuel-level ?a ?l1))
-              (fuel-level ?a ?l2)))
-                                  
-(:action zoom
- :parameters (?a - aircraft ?c1 ?c2 - city ?l1 ?l2 ?l3 - flevel)
-
- :precondition (and (at ?a ?c1)
-                 (fuel-level ?a ?l1)
-     (next ?l2 ?l1)
-     (next ?l3 ?l2)
-    )
- :effect (and (not (at ?a ?c1))
-              (at ?a ?c2)
-              (not (fuel-level ?a ?l1))
-              (fuel-level ?a ?l3)
-  )
-) 
-
-(:action refuel
- :parameters (?a - aircraft ?c - city ?l - flevel ?l1 - flevel)
-
- :precondition (and (fuel-level ?a ?l)
-                 (next ?l ?l1)
-                 (at ?a ?c))
- :effect (and (fuel-level ?a ?l1) (not (fuel-level ?a ?l))))
-
+(:action take_image
+ :parameters ( ?s ?d ?i ?m)
+ :precondition
+  (and (satellite ?s) (direction ?d) (instrument ?i) (mode ?m)  (calibrated ?i) (on_board ?i ?s) (supports ?i ?m) (power_on ?i) (pointing ?s ?d) (power_on ?i))
+ :effect
+   (have_image ?d ?m))
 
 )

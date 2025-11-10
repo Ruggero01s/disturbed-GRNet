@@ -15,8 +15,20 @@ import pandas as pd
 from datetime import datetime
 import tensorflow as tf
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
+# Configure TensorFlow to limit memory growth
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+    except RuntimeError as e:
+        print(f"GPU memory growth setting error: {e}")
 import json
 from typing import Union
+import gc
+from keras import backend as K
+import psutil
 
 # Import all required functions from the notebook
 from GRNet_approach_functions import (
@@ -73,26 +85,56 @@ def run_experiment(obs_file: str,
     return [result, correct_goal_idx, get_max(scores)[0]]
 
 
-def init_models(model_type: int, percentage: float) -> None:
-    """Load all models into memory."""
+def get_memory_usage() -> str:
+    """Get current memory usage as a formatted string."""
+    process = psutil.Process(os.getpid())
+    mem_info = process.memory_info()
+    mem_mb = mem_info.rss / 1024 / 1024
+    return f"{mem_mb:.1f} MB"
+
+
+def load_single_model(domain: int, model_type: int, percentage: float) -> None:
+    """Load only the model for a specific domain."""
+    model_file = get_domain_related(domain, C.MODEL_FILE, model_type=model_type, percentage=percentage)
+    model = load_model(join(C.MODELS_DIR, model_file), custom_objects=C.CUSTOM_OBJECTS)
     
-    model_file = get_domain_related(C.LOGISTICS, C.MODEL_FILE, model_type=model_type, percentage=percentage)
-    C.MODEL_LOGISTICS = load_model(join(C.MODELS_DIR, model_file), custom_objects=C.CUSTOM_OBJECTS)
+    # Set the appropriate model in C constants
+    if domain == C.LOGISTICS:
+        C.MODEL_LOGISTICS = model
+    elif domain == C.SATELLITE:
+        C.MODEL_SATELLITE = model
+    elif domain == C.ZENOTRAVEL:
+        C.MODEL_ZENOTRAVEL = model
+    elif domain == C.DEPOTS:
+        C.MODEL_DEPOTS = model
+    elif domain == C.DRIVERLOG:
+        C.MODEL_DRIVERLOG = model
+    elif domain == C.BLOCKSWORLD:
+        C.MODEL_BLOCKSWORLS = model
     
-    model_file = get_domain_related(C.SATELLITE, C.MODEL_FILE, model_type=model_type, percentage=percentage)
-    C.MODEL_SATELLITE = load_model(join(C.MODELS_DIR, model_file), custom_objects=C.CUSTOM_OBJECTS)
+    print(f'✓ Loaded model for domain {get_domain_related(domain, C.MODEL_FILE).split("_")[0]} (Memory: {get_memory_usage()})')
+
+
+def unload_models() -> None:
+    """Unload all models and clear memory."""
+    mem_before = get_memory_usage()
     
-    model_file = get_domain_related(C.ZENOTRAVEL, C.MODEL_FILE, model_type=model_type, percentage=percentage)
-    C.MODEL_ZENOTRAVEL = load_model(join(C.MODELS_DIR, model_file), custom_objects=C.CUSTOM_OBJECTS)
+    # Clear model references
+    C.MODEL_LOGISTICS = None
+    C.MODEL_SATELLITE = None
+    C.MODEL_ZENOTRAVEL = None
+    C.MODEL_DEPOTS = None
+    C.MODEL_DRIVERLOG = None
+    C.MODEL_BLOCKSWORLS = None
     
-    model_file = get_domain_related(C.DEPOTS, C.MODEL_FILE, model_type=model_type, percentage=percentage)
-    C.MODEL_DEPOTS = load_model(join(C.MODELS_DIR, model_file), custom_objects=C.CUSTOM_OBJECTS)
+    # Clear Keras/TensorFlow session
+    K.clear_session()
     
-    model_file = get_domain_related(C.DRIVERLOG, C.MODEL_FILE, model_type=model_type, percentage=percentage)
-    C.MODEL_DRIVERLOG = load_model(join(C.MODELS_DIR, model_file), custom_objects=C.CUSTOM_OBJECTS)
+    # Force garbage collection
+    gc.collect()
     
-    model_file = get_domain_related(C.BLOCKSWORLD, C.MODEL_FILE, model_type=model_type, percentage=percentage)
-    C.MODEL_BLOCKSWORLS = load_model(join(C.MODELS_DIR, model_file), custom_objects=C.CUSTOM_OBJECTS)
+    mem_after = get_memory_usage()
+    print(f'✓ Models unloaded and memory cleared (Before: {mem_before} → After: {mem_after})')
 
 
 def run_comparison(domain: int, domain_dir: str, source_dir: str, 
@@ -155,6 +197,8 @@ def run_comparison(domain: int, domain_dir: str, source_dir: str,
             for idx, f in enumerate(files):
                 if (idx + 1) % 100 == 0:
                     print(f'  Processed {idx + 1}/{len(files)} files...')
+                    # Periodic garbage collection to prevent memory buildup
+                    gc.collect()
                     
                 if f.endswith('.zip'):
                     unzip_file(join(plans_dir, f), source_dir)
@@ -216,6 +260,9 @@ def run_comparison(domain: int, domain_dir: str, source_dir: str,
         overall_accuracy = (sum([r['correct_prediction'] for r in detailed_results if r['noise_level'] == noise]) / 
                            len([r for r in detailed_results if r['noise_level'] == noise])) * 100
         print(f'\n  Overall accuracy with {noise}% noise: {overall_accuracy:.2f}%')
+        
+        # Force garbage collection after each noise level
+        gc.collect()
     
     # Save results
     save_results(detailed_results, noise_levels, domain, output_dir)
@@ -329,8 +376,8 @@ Examples:
     parser.add_argument('--output-dir', type=str, default='.',
                         help='Directory to save output CSV files (default: current directory)')
     
-    parser.add_argument('--noise-levels', type=int, nargs='+', default=[0, 10, 20, 30],
-                        help='Noise levels to test (default: 0 10 20 30)')
+    parser.add_argument('--noise-levels', type=int, nargs='+', default=[0, 5, 10, 15, 20, 30],
+                        help='Noise levels to test (default: 0 5 10 15 20 30)')
     
     parser.add_argument('--obs-percentages', type=int, nargs='+', default=[10, 30, 50, 70, 100],
                         help='Observation percentages to test (default: 10 30 50 70 100)')
@@ -372,18 +419,13 @@ Examples:
     print(f'Observation percentages: {args.obs_percentages}%')
     print(f'Model type: {args.model_type}')
     
-    # Load models once for all domains
-    print(f'\n{"="*60}')
-    print('LOADING MODELS')
-    print(f'{"="*60}')
+    # Determine model type
     model_type = C.SMALL if args.model_type == 'small' else C.COMPLETE
-    init_models(model_type=model_type, percentage=0)
-    print('✓ All models loaded successfully')
     
     # Convert percentages to decimals
     obs_percentages = [p / 100.0 for p in args.obs_percentages]
     
-    # Run comparison for each domain
+    # Run comparison for each domain (load models one at a time to save memory)
     overall_start_time = time.time()
     failed_domains = []
     
@@ -405,6 +447,12 @@ Examples:
                 failed_domains.append(domain_name)
                 continue
             
+            # Load only the model for this domain
+            print(f'\n{"="*60}')
+            print(f'LOADING MODEL FOR {domain_name.upper()}')
+            print(f'{"="*60}')
+            load_single_model(domain=domain, model_type=model_type, percentage=0)
+            
             # Run comparison
             start_time = time.time()
             run_comparison(
@@ -417,11 +465,22 @@ Examples:
             )
             
             elapsed_time = time.time() - start_time
-            print(f'\n✓ {domain_name} completed in {elapsed_time:.2f} seconds')
+            print(f'\n✓ {domain_name} completed in {elapsed_time:.2f} seconds (Memory: {get_memory_usage()})')
+            
+            # Unload model to free memory before next domain
+            print(f'\nUnloading {domain_name} model to free memory...')
+            unload_models()
             
         except Exception as e:
             print(f'\n✗ Error processing {domain_name}: {e}')
+            import traceback
+            traceback.print_exc()
             failed_domains.append(domain_name)
+            # Still try to unload models even on error
+            try:
+                unload_models()
+            except:
+                pass
             continue
     
     # Final summary

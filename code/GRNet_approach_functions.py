@@ -440,14 +440,16 @@ def get_domain_related(domain: int, element: int, model_type: int = C.SMALL,
 # Domain Component Methods
 # ============================================================================
 
+#* modified to get last n action if plan too long (instead of first n actions)
 def get_observations_array(observations: list, max_plan_length: int) -> np.ndarray:
     """Create an array of observations index."""
-    WARNING_MSG = (f'The action trace is too long. Only the first {max_plan_length}'+
+    WARNING_MSG = (f'The action trace is too long. Only the last {max_plan_length} '+
                  f'actions will be considered.')
     
     observations_array = np.zeros((1, max_plan_length))
     if len(observations) > max_plan_length:
         print(WARNING_MSG)
+        observations = observations[::-1]
     for index, observation in enumerate(observations):
         if index < max_plan_length:
             observations_array[0][index] = int(observation)

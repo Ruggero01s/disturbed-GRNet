@@ -1,47 +1,22 @@
-(define (problem zenotravel-test)
-(:domain zeno-travel)
+(define (problem blocksworld-test)
+(:domain blocksworld)
 (:objects
-		plane1 - aircraft
-		plane2 - aircraft
-		plane3 - aircraft
-		person1 - person
-		person2 - person
-		person3 - person
-		person4 - person
-		person5 - person
-		person6 - person
-		city0 - city
-		city1 - city
-		city2 - city
-		city3 - city
-		city4 - city
-		fl0 - flevel
-		fl1 - flevel
-		fl2 - flevel
-		fl3 - flevel
-		fl4 - flevel
-		fl5 - flevel
-		fl6 - flevel
+	A B C D E F G H I J 
 )
 (:init
-	(at plane1 city1)
-	(at plane2 city4)
-	(at plane3 city3)
-	(at person1 city3)
-	(at person2 city1)
-	(at person3 city3)
-	(at person4 city4)
-	(at person5 city4)
-	(at person6 city0)
-	(next fl0 fl1)
-	(next fl1 fl2)
-	(next fl2 fl3)
-	(next fl3 fl4)
-	(next fl4 fl5)
-	(next fl5 fl6)
-	(fuel-level plane1 fl2)
-	(fuel-level plane2 fl3)
-	(fuel-level plane3 fl1)
+	(on-table A)
+	(arm-empty)
+	(clear A)
+	(on H G)
+	(on J H)
+	(on-table I)
+	(on E I)
+	(clear J)
+	(on F B)
+	(on B D)
+	(on D E)
+	(on G C)
+	(on C F)
 )
 (:goal 
 (and

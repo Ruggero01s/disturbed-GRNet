@@ -1,50 +1,51 @@
-(define (problem zenotravel-test)
-(:domain zeno-travel)
+(define (problem depots-test)
+(:domain depots)
 (:objects
-		plane1 - aircraft
-		plane2 - aircraft
-		plane3 - aircraft
-		person1 - person
-		person2 - person
-		person3 - person
-		person4 - person
-		person5 - person
-		person6 - person
-		person7 - person
-		city0 - city
-		city1 - city
-		city2 - city
-		city3 - city
-		city4 - city
-		city5 - city
-		fl0 - flevel
-		fl1 - flevel
-		fl2 - flevel
-		fl3 - flevel
-		fl4 - flevel
-		fl5 - flevel
-		fl6 - flevel
+		depot0 - Depot
+		distributor0 - Distributor
+		truck0 - Truck
+		truck1 - Truck
+		pallet0 - Pallet
+		pallet1 - Pallet
+		crate0 - Crate
+		crate1 - Crate
+		crate2 - Crate
+		crate3 - Crate
+		crate4 - Crate
+		crate5 - Crate
+		crate6 - Crate
+		crate7 - Crate
+		hoist0 - Hoist
+		hoist1 - Hoist
 )
 (:init
-	(at plane1 city5)
-	(at plane2 city0)
-	(at plane3 city2)
-	(at person1 city0)
-	(at person2 city0)
-	(at person3 city0)
-	(at person4 city1)
-	(at person5 city3)
-	(at person6 city1)
-	(at person7 city0)
-	(next fl0 fl1)
-	(next fl1 fl2)
-	(next fl2 fl3)
-	(next fl3 fl4)
-	(next fl4 fl5)
-	(next fl5 fl6)
-	(fuel-level plane1 fl3)
-	(fuel-level plane2 fl4)
-	(fuel-level plane3 fl2)
+
+	(at crate3 depot0)
+	(available hoist0)
+	(clear crate5)
+	(available hoist1)
+	(on crate5 crate1)
+	(at pallet0 distributor0)
+	(at crate0 depot0)
+	(on crate4 pallet0)
+	(at truck1 distributor0)
+	(at truck0 distributor0)
+	(clear crate7)
+	(on crate7 crate2)
+	(at crate4 distributor0)
+	(on crate0 crate6)
+	(at crate6 depot0)
+	(at hoist0 depot0)
+	(on crate2 crate3)
+	(at hoist1 distributor0)
+	(at crate1 distributor0)
+	(on crate3 crate0)
+	(at pallet1 depot0)
+	(on crate1 crate4)
+	(at crate2 depot0)
+	(on crate6 pallet1)
+	(at crate5 distributor0)
+	(at crate7 depot0)
 )
 (:goal 
 (and

@@ -21,23 +21,6 @@ python run_noisy_comparison.py --domains blocksworld logistics satellite
 python run_noisy_comparison.py --domains all
 ```
 
-### Run multiple domains with custom settings
-```bash
-# Quick test on all domains with minimal settings
-/home/ruggero.signoroni/disturbed-GRNet/.venv/bin/python run_noisy_comparison.py \
-    --domains zenotravel \
-    --noise-levels 0 10 20 30 \
-    --obs-percentages 10 30 50 70 100 \
-    --output-dir ./disturbed_results
-
-# Test specific domains with full settings
-python run_noisy_comparison.py \
-    --domains blocksworld depots driverlog \
-    --noise-levels 0 10 20 30 \
-    --obs-percentages 10 30 50 70 100 \
-    --output-dir ./full_results
-```
-
 ## What Changed?
 
 - **`--domain`** → **`--domains`** (now accepts multiple values)

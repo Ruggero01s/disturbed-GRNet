@@ -1,56 +1,56 @@
-(define (problem zenotravel-test)
-(:domain zeno-travel)
+(define (problem logistics-test)
+(:domain logistics)
 (:objects
-		plane1 - aircraft
-		plane2 - aircraft
-		plane3 - aircraft
-		person1 - person
-		person2 - person
-		person3 - person
-		person4 - person
-		person5 - person
-		person6 - person
-		city0 - city
-		city1 - city
-		city2 - city
-		city3 - city
-		city4 - city
-		fl0 - flevel
-		fl1 - flevel
-		fl2 - flevel
-		fl3 - flevel
-		fl4 - flevel
-		fl5 - flevel
-		fl6 - flevel
+	apn1 apn2 apn3 apn4 apn5 apn6 - airplane
+	cit1 cit2 cit3 cit4 cit5 cit6 - city
+	apt1 apt2 apt3 apt4 apt5 apt6 - airport
+	tru1 tru2 tru3 tru4 tru5 - truck
+	obj00 obj11 obj12 obj13 obj21 obj22 obj23 obj33 obj44 obj55 - package
+	pos11 pos12 pos13 pos21 pos22 pos23 pos33 pos44 pos55 pos66 - location
 )
 (:init
-	(at plane1 city1)
-	(at plane2 city4)
-	(at plane3 city3)
-	(at person1 city3)
-	(at person2 city1)
-	(at person3 city3)
-	(at person4 city4)
-	(at person5 city4)
-	(at person6 city0)
-	(next fl0 fl1)
-	(next fl1 fl2)
-	(next fl2 fl3)
-	(next fl3 fl4)
-	(next fl4 fl5)
-	(next fl5 fl6)
-	(fuel-level plane1 fl2)
-	(fuel-level plane2 fl3)
-	(fuel-level plane3 fl1)
+	(at apn1 apt5)
+	(at apn2 apt4)
+	(at apn3 apt6)
+	(at apn4 apt1)
+	(at apn5 apt2)
+	(at apn6 apt4)
+	(at obj00 pos23)
+	(at obj11 pos12)
+	(at obj12 pos21)
+	(at obj13 pos33)
+	(at obj21 pos66)
+	(at obj22 pos22)
+	(at obj23 pos13)
+	(at obj33 pos21)
+	(at obj44 pos13)
+	(at obj55 pos66)
+	(in-city apt1 cit5)
+	(in-city apt2 cit6)
+	(in-city apt3 cit2)
+	(in-city apt4 cit3)
+	(in-city apt5 cit4)
+	(in-city apt6 cit1)
+	(in-city pos11 cit1)
+	(in-city pos12 cit5)
+	(in-city pos13 cit5)
+	(in-city pos21 cit5)
+	(in-city pos22 cit6)
+	(in-city pos23 cit1)
+	(in-city pos33 cit3)
+	(in-city pos44 cit1)
+	(in-city pos55 cit3)
+	(in-city pos66 cit6)
+	(at tru5 pos23)
+	(at tru4 pos12)
+	(at tru3 pos22)
+	(at tru2 pos33)
+	(at tru1 pos22)
 )
 (:goal 
 (and
-(AT PERSON6 CITY0)
- (AT PERSON5 CITY3)
- (AT PERSON4 CITY2)
- (AT PERSON3 CITY1)
- (AT PERSON2 CITY4)
- (AT PERSON1 CITY3)
- (AT PLANE1 CITY0)
+(AT OBJ44 POS21)
+ (AT OBJ21 POS23)
+ (AT OBJ12 POS23)
 ))
 )

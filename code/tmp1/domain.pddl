@@ -1,61 +1,39 @@
-(define (domain zeno-travel)
-(:requirements :typing)
-(:types aircraft person city flevel - object)
-(:predicates (at ?x - (either person aircraft) ?c - city)
-             (in ?p - person ?a - aircraft)
-       (fuel-level ?a - aircraft ?l - flevel)
-       (next ?l1 ?l2 - flevel))
+(define (domain depots)
+(:requirements :strips :typing)
+(:types place locatable - object
+	depot distributor - place
+        truck hoist surface - locatable
+        pallet crate - surface)
 
+(:predicates (at ?x - locatable ?y - place)
+             (on ?x - crate ?y - surface)
+             (in ?x - crate ?y - truck)
+             (lifting ?x - hoist ?y - crate)
+             (available ?x - hoist)
+             (clear ?x - surface))
+	
+(:action Drive
+  :parameters (?x - truck ?y - place ?z - place) 
+  :precondition (and (at ?x ?y))
+  :effect (and (not (at ?x ?y)) (at ?x ?z)))
 
-(:action board
- :parameters (?p - person ?a - aircraft ?c - city)
- 
- :precondition (and (at ?p ?c)
-                 (at ?a ?c))
- :effect (and (not (at ?p ?c))
-              (in ?p ?a)))
+(:action Lift
+  :parameters (?x - hoist ?y - crate ?z - surface ?p - place)
+  :precondition (and (at ?x ?p) (available ?x) (at ?y ?p) (on ?y ?z) (clear ?y))
+  :effect (and (not (at ?y ?p)) (lifting ?x ?y) (not (clear ?y)) (not (available ?x)) (clear ?z) (not (on ?y ?z))))
 
-(:action debark
- :parameters (?p - person ?a - aircraft ?c - city)
+(:action Drop 
+  :parameters (?x - hoist ?y - crate ?z - surface ?p - place)
+  :precondition (and (at ?x ?p) (at ?z ?p) (clear ?z) (lifting ?x ?y))
+  :effect (and (available ?x) (not (lifting ?x ?y)) (at ?y ?p) (not (clear ?z)) (clear ?y)(on ?y ?z)))
 
- :precondition (and (in ?p ?a)
-                 (at ?a ?c))
- :effect (and (not (in ?p ?a))
-              (at ?p ?c)))
+(:action Load
+  :parameters (?x - hoist ?y - crate ?z - truck ?p - place)
+  :precondition (and (at ?x ?p) (at ?z ?p) (lifting ?x ?y))
+  :effect (and (not (lifting ?x ?y)) (in ?y ?z) (available ?x)))
 
-(:action fly 
- :parameters (?a - aircraft ?c1 ?c2 - city ?l1 ?l2 - flevel)
- 
- :precondition (and (at ?a ?c1)
-                 (fuel-level ?a ?l1)
-     (next ?l2 ?l1))
- :effect (and (not (at ?a ?c1))
-              (at ?a ?c2)
-              (not (fuel-level ?a ?l1))
-              (fuel-level ?a ?l2)))
-                                  
-(:action zoom
- :parameters (?a - aircraft ?c1 ?c2 - city ?l1 ?l2 ?l3 - flevel)
-
- :precondition (and (at ?a ?c1)
-                 (fuel-level ?a ?l1)
-     (next ?l2 ?l1)
-     (next ?l3 ?l2)
-    )
- :effect (and (not (at ?a ?c1))
-              (at ?a ?c2)
-              (not (fuel-level ?a ?l1))
-              (fuel-level ?a ?l3)
-  )
-) 
-
-(:action refuel
- :parameters (?a - aircraft ?c - city ?l - flevel ?l1 - flevel)
-
- :precondition (and (fuel-level ?a ?l)
-                 (next ?l ?l1)
-                 (at ?a ?c))
- :effect (and (fuel-level ?a ?l1) (not (fuel-level ?a ?l))))
-
-
+(:action Unload 
+  :parameters (?x - hoist ?y - crate ?z - truck ?p - place)
+  :precondition (and (at ?x ?p) (at ?z ?p) (available ?x) (in ?y ?z))
+  :effect (and (not (in ?y ?z)) (not (available ?x)) (lifting ?x ?y)))
 )
